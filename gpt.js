@@ -31,7 +31,8 @@ async function sendMessage() {
       },
       body: JSON.stringify({
         model: "gpt-4o",
-        messages: [{ role: "user", content: text }]
+        messages: [{ role: "user", content: text },
+                   {role: "system", content: "Отвечай кратко и на русском языке." }]
       })
     });
 
@@ -90,3 +91,4 @@ document.addEventListener('click', (e) => {
     }
   }
 });
+
