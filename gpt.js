@@ -5,16 +5,20 @@ const chatMessages = document.getElementById('chat-messages');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
+
 searchInput.addEventListener('focus', () => {
   searchContainer.classList.add('active');
 });
+
 
 async function sendMessage() {
   const text = searchInput.value.trim();
   if (!text) return;
 
+
   addMessage(text, 'user');
   searchInput.value = '';
+
 
   const loadingId = addMessage('Thinking...', 'ai');
 
@@ -27,15 +31,13 @@ async function sendMessage() {
       },
       body: JSON.stringify({
         model: "gpt-4o",
-        messages: [
-          { role: "user", content: text },
-          { role: "system", content: "Отвечай кратко и на русском языке." }
-        ]
+        messages: [{ role: "user", content: text }]
       })
     });
 
     const data = await response.json();
 
+    
     const loadingElement = document.getElementById(loadingId);
     if (loadingElement) loadingElement.remove();
 
@@ -46,6 +48,7 @@ async function sendMessage() {
       addMessage(aiText, 'ai');
     }
   } catch (error) {
+    
     const loadingElement = document.getElementById(loadingId);
     if (loadingElement) loadingElement.remove();
 
@@ -59,6 +62,7 @@ function addMessage(text, sender) {
   messageDiv.classList.add('message', `${sender}-message`);
   messageDiv.textContent = text;
 
+
   const id = 'msg-' + Date.now();
   messageDiv.id = id;
 
@@ -66,6 +70,7 @@ function addMessage(text, sender) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
   return id;
 }
+
 
 searchBtn.addEventListener('click', sendMessage);
 
@@ -75,8 +80,10 @@ searchInput.addEventListener('keypress', (e) => {
   }
 });
 
+
 document.addEventListener('click', (e) => {
   if (!searchContainer.contains(e.target)) {
+   
     if (searchInput.value === '' && chatMessages.children.length === 0) {
       searchContainer.classList.remove('active');
     }
