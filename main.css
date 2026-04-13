@@ -1,84 +1,114 @@
-/* --- Исправление контейнера для адаптивности --- */
+/* --- Глобальные эко-переменные --- */
+:root {
+    --eco-green: #2e7d32;      /* Насыщенный зеленый */
+    --eco-light: #81c784;      /* Светло-зеленый для акцентов */
+    --eco-bg: #f1f8e9;         /* Очень светлый травяной фон */
+    --eco-text: #1b5e20;       /* Темно-зеленый для текста */
+    --eco-accent: #ffa000;     /* Теплый солнечный акцент (вместо агрессивного оранжевого) */
+}
+
+/* --- Исправление контейнера --- */
 .container {
     max-width: 1400px;
-    width: 95%; /* Позволяет сжиматься на мобильных */
+    width: 95%;
     margin: 0 auto;
 }
 
-/* --- Оптимизация переключения видов --- */
+/* --- Оптимизация переключения видов (эффект "прорастания") --- */
 .view-section {
-    display: none; /* Убираем !important для гибкости */
+    display: none;
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
+    transform: scale(0.98); /* Легкое уменьшение для эффекта появления */
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .view-section.active {
     display: block;
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
 }
 
-/* --- Стили для группы ввода (чтобы иконки были в ряд) --- */
+/* --- Группа ввода (Эко-дизайн) --- */
 .input-group {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 5px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: border-color 0.3s;
+    background: rgba(46, 125, 50, 0.08); /* Полупрозрачный зеленый фон */
+    border-radius: 20px; /* Более мягкие углы */
+    padding: 8px 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .input-group:focus-within {
-    border-color: #fa9021;
+    border-color: var(--eco-light);
+    background: white;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.1);
 }
 
 /* --- Улучшение мобильной версии --- */
 @media (max-width: 768px) {
     header nav {
-        display: none; /* Скрываем меню или делаем "бургер" */
+        display: none; 
     }
     
     .hero--info {
         width: 100%;
         text-align: center;
+        padding: 20px;
     }
 
     .search-container.active {
-        width: 95%;
-        height: 80vh;
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
     }
 
+    /* Картинка (например, лист или планета) */
     .corner-img {
-        width: 120px; /* Уменьшаем картинку на телефонах */
+        width: 100px;
+        filter: drop-shadow(0 0 10px rgba(46, 125, 50, 0.2));
     }
 }
 
-/* --- Стили для индикатора "AI печатает" --- */
+/* --- Индикатор "Эко-помощник думает" --- */
 .typing .message-content::after {
-    content: "● ● ●";
-    display: block;
-    font-size: 10px;
-    color: #fa9021;
-    animation: blink 1s infinite;
-    margin-top: 5px;
+    content: "🌱"; /* Заменили точки на росток */
+    display: inline-block;
+    font-size: 14px;
+    animation: grow 1.5s infinite;
+    margin-left: 10px;
 }
 
-@keyframes blink {
-    0% { opacity: 0.2; }
-    50% { opacity: 1; }
-    100% { opacity: 0.2; }
+@keyframes grow {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.5; }
 }
 
-/* --- Фикс сайдбара --- */
+/* --- Фикс сайдбара (Древовидное меню) --- */
 .chat-sidebar {
+    background: white;
+    border-right: 1px solid var(--eco-bg);
     left: 0;
     transform: translateX(-100%);
-    visibility: hidden; /* Чтобы не перехватывал клики в закрытом состоянии */
+    visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .chat-sidebar.open {
     transform: translateX(0);
     visibility: visible;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Стили для кнопок чата */
+.new-chat-btn {
+    background: var(--eco-green);
+    color: white;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.new-chat-btn:hover {
+    background: var(--eco-text);
 }
