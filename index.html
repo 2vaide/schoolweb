@@ -4,59 +4,297 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECO-LIFE — Твой гид по экологии</title>
-    <link rel="stylesheet" href="main.css">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
-        /* Добавим немного эко-стиля через CSS переменные, если они поддерживаются вашим main.css */
+        /* --- Глобальные настройки и Эко-переменные --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
         :root {
             --eco-green: #2e7d32;
-            --eco-accent: #8bc34a;
+            --eco-light: #81c784;
+            --eco-bg: #f1f8e9;
+            --eco-text: #1b5e20;
+            --eco-accent: #ffa000;
+            --white: #ffffff;
         }
-        .typing-indicator { font-style: italic; color: #558b2f; font-size: 0.9em; display: flex; align-items: center; gap: 8px; }
-        .message-actions { display: flex; gap: 10px; margin-top: 5px; opacity: 0.7; transition: opacity 0.3s; }
-        .message-actions:hover { opacity: 1; }
-        .action-btn { background: none; border: none; color: var(--eco-green); cursor: pointer; padding: 2px; }
-        /* Стиль для активного состояния микрофона в эко-цветах */
-        .listening { color: #d32f2f; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        body {
+            background-color: var(--eco-bg);
+            color: var(--eco-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* --- Шапка сайта --- */
+        header {
+            background: var(--white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--eco-green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--eco-text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--eco-green);
+        }
+
+        .btn-nav {
+            background: var(--eco-green);
+            color: white !important;
+            padding: 8px 18px;
+            border-radius: 20px;
+        }
+
+        /* --- Контейнеры секций --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .view-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Главная страница (Hero) --- */
+        .hero {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--eco-green);
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .main-btn {
+            background: var(--eco-green);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .main-btn:hover {
+            background: var(--eco-text);
+            transform: translateY(-3px);
+        }
+
+        /* --- Чат (Интерфейс) --- */
+        .search-container {
+            background: var(--white);
+            border-radius: 20px;
+            height: 75vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 15px;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: var(--eco-green);
+            color: white;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background: var(--eco-bg);
+            color: var(--eco-text);
+        }
+
+        .input-group {
+            padding: 20px;
+            background: var(--white);
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--eco-bg);
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .icon-btn {
+            background: var(--eco-bg);
+            border: none;
+            color: var(--eco-green);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .icon-btn:hover {
+            background: var(--eco-green);
+            color: white;
+        }
+
+        /* --- Сайдбар --- */
+        .chat-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            z-index: 2000;
+            transform: translateX(-100%);
+            transition: 0.4s;
+            padding: 20px;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.05);
+        }
+
+        .chat-sidebar.open { transform: translateX(0); }
+
+        .sidebar-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2001;
+            background: var(--eco-green);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none; /* Появится в режиме чата */
+        }
+
+        /* Анимация роста 🌱 */
+        .typing-indicator::after {
+            content: "🌱";
+            display: inline-block;
+            animation: grow 1.5s infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes grow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.4); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            header nav { display: none; }
+            .hero h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 
 <body>
     <div class="wrapper">
-        <header class="container">
+        <header>
             <span class="logo">🌿 ECO-LIFE</span>
             <nav>
                 <ul>
-                    <li class="active"><a href="#" onclick="switchView('view-home'); return false;">Главная</a></li>
-                    <li><a href="#" onclick="switchView('view-chat'); return false;">Эко-Помощник</a></li>
-                    <li><a href="#" onclick="switchView('view-about'); return false;">Миссия</a></li>
-                    <li><a href="#" onclick="switchView('view-portfolio'); return false;">Наши проекты</a></li>
-                    <li><a href="#" onclick="switchView('view-news'); return false;">Эко-Новости</a></li>
-                    <li class="btn"><a href="#" onclick="switchView('view-contacts'); return false;">Участвовать</a></li>
+                    <li><a href="#" onclick="switchView('view-home')">Главная</a></li>
+                    <li><a href="#" onclick="switchView('view-chat')">Помощник</a></li>
+                    <li><a href="#" onclick="switchView('view-about')">О проекте</a></li>
+                    <li><a href="#" onclick="switchView('view-contacts')" class="btn-nav">Участвовать</a></li>
                 </ul>
             </nav>
         </header>
 
         <div id="chatSidebar" class="chat-sidebar">
-            <button id="newChatBtn" class="new-chat-btn">
-                <i data-lucide="leaf"></i> Новый вопрос
+            <button onclick="createNewChat()" style="width:100%; padding:10px; margin-bottom:20px; border-radius:10px; border:none; background:var(--eco-bg); cursor:pointer;">
+                + Новый вопрос
             </button>
-            <div class="chat-list" id="chatList"></div>
+            <div id="chatList"></div>
         </div>
 
         <button id="sidebarToggle" class="sidebar-toggle">
-            <i data-lucide="panel-left"></i>
+            <i data-lucide="menu"></i>
         </button>
 
-        <div id="views-container">
+        <main class="container">
             <div id="view-home" class="view-section active">
-                <div class="hero container">
-                    <div class="hero--info">
-                        <h2>Зеленое будущее начинается с тебя</h2>
-                        <h1>Помощь экологии</h1>
-                        <p>Новый гайд: "Как сократить углеродный след и правильно сортировать пластик"</p>
-                        <button class="btn" onclick="switchView('view-chat')">Спросить совета</button>
-                    </div>
+                <div class="hero">
+                    <h2>Зеленое будущее начинается с тебя</h2>
+                    <h1>Помощь экологии</h1>
+                    <p>Узнай, как правильно сортировать отходы и уменьшить свой эко-след с помощью ИИ.</p>
+                    <button class="main-btn" onclick="switchView('view-chat')">Начать общение</button>
                 </div>
             </div>
 
@@ -64,113 +302,59 @@
                 <div class="search-container">
                     <div id="chat-messages" class="chat-messages"></div>
                     <div class="input-group">
-                        <input type="search" id="searchInput" placeholder="Как переработать батарейки?.." autocomplete="off" />
-                        <button id="micBtn" class="icon-btn" title="Голосовой ввод"><i data-lucide="mic"></i></button>
-                        <button id="searchBtn" class="icon-btn" title="Отправить"><i data-lucide="send"></i></button>
+                        <input type="text" id="searchInput" placeholder="Как переработать пластик?.." />
+                        <button id="micBtn" class="icon-btn"><i data-lucide="mic"></i></button>
+                        <button id="searchBtn" class="icon-btn"><i data-lucide="send"></i></button>
                     </div>
                 </div>
             </div>
 
-            <div id="view-about" class="view-section glass-panel container" style="display:none;">
-                <h1>🌍 О проекте ECO-LIFE</h1>
-                <p>Мы используем мощь Искусственного Интеллекта, чтобы сделать жизнь на планете чище. Наш ИИ подскажет, куда сдать отходы и как внедрить эко-привычки в повседневную жизнь.</p>
+            <div id="view-about" class="view-section">
+                <div class="hero">
+                    <h1>🌍 Наша миссия</h1>
+                    <p>Мы объединяем технологии и природу, чтобы сделать экологическое просвещение доступным для каждого школьника и студента.</p>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
-        const API_KEY = 'ВАШ_НОВЫЙ_PPLX_API_KEY'; 
+        // --- Настройки API ---
+        const API_KEY = 'ВАШ_API_КЛЮЧ_ЗДЕСЬ'; // Вставьте свой ключ
 
-        const searchContainer = document.querySelector('.search-container');
         const chatMessages = document.getElementById('chat-messages');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
-        const micBtn = document.getElementById('micBtn');
+        const sidebar = document.getElementById('chatSidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
 
         let chatHistory = JSON.parse(localStorage.getItem('eco_history')) || [];
-        let currentChatId = null;
+        let currentChatId = Date.now().toString();
         let currentMessages = [];
 
         lucide.createIcons();
 
-        // Голосовой ввод
-        let recognition;
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'ru-RU';
-            recognition.onstart = () => micBtn.classList.add('listening');
-            recognition.onend = () => micBtn.classList.remove('listening');
-            recognition.onresult = (event) => {
-                searchInput.value = event.results[0][0].transcript;
-            };
-            micBtn.addEventListener('click', () => {
-                try { recognition.start(); } catch (e) { console.error(e); }
-            });
+        // Переключение вкладок
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            
+            // Показываем кнопку сайдбара только в чате
+            sidebarToggle.style.display = (viewId === 'view-chat') ? 'flex' : 'none';
         }
 
-        function initSidebar() {
-            renderChatList();
-            const sidebar = document.getElementById('chatSidebar');
-            document.getElementById('sidebarToggle').addEventListener('click', () => sidebar.classList.toggle('open'));
-            document.getElementById('newChatBtn').addEventListener('click', () => {
-                createNewChat();
-                if (window.innerWidth < 768) sidebar.classList.remove('open');
-            });
-            createNewChat();
-        }
+        sidebarToggle.onclick = () => sidebar.classList.toggle('open');
 
-        function createNewChat() {
-            currentChatId = Date.now().toString();
-            currentMessages = [];
-            chatMessages.innerHTML = '';
-            renderChatList();
-        }
-
-        function renderChatList() {
-            const list = document.getElementById('chatList');
-            list.innerHTML = '';
-            chatHistory.forEach(chat => {
-                const div = document.createElement('div');
-                div.className = `chat-item ${chat.id === currentChatId ? 'active' : ''}`;
-                div.innerHTML = `<span><i data-lucide="leaf"></i> ${chat.title}</span>`;
-                div.onclick = () => loadChat(chat.id);
-                list.appendChild(div);
-            });
-            lucide.createIcons();
-        }
-
-        function loadChat(id) {
-            const chat = chatHistory.find(c => c.id === id);
-            if (!chat) return;
-            currentChatId = chat.id;
-            currentMessages = chat.messages;
-            chatMessages.innerHTML = '';
-            currentMessages.forEach(msg => restoreMessage(msg.text, msg.sender));
-            renderChatList();
-        }
-
-        function restoreMessage(text, sender) {
-            const { contentDiv, messageDiv } = addMessage(text, sender);
-            if (sender === 'ai') {
-                contentDiv.innerHTML = marked.parse(text);
-                addActionsToMessage(messageDiv, text);
-            }
-        }
-
+        // Отправка сообщения
         async function sendMessage() {
             const text = searchInput.value.trim();
             if (!text) return;
 
-            currentMessages.push({ text: text, sender: 'user' });
             addMessage(text, 'user');
             searchInput.value = '';
-
-            const { loadDiv } = addStatusMessage('Анализирую экологические данные...');
             
+            const loadDiv = addStatusMessage('Ищу эко-совет...');
+
             try {
                 const response = await fetch('https://api.perplexity.ai/chat/completions', {
                     method: 'POST',
@@ -181,8 +365,7 @@
                     body: JSON.stringify({
                         model: "sonar",
                         messages: [
-                            // ИНСТРУКЦИЯ ДЛЯ ИИ: Роль эколога
-                            { role: "system", content: "Ты — эксперт по экологии, устойчивому развитию и защите окружающей среды. Твоя цель — давать практические советы по переработке, сокращению отходов и экологичному образу жизни. Отвечай дружелюбно и профессионально." },
+                            { role: "system", content: "Ты эко-помощник. Твои советы должны быть полезными, экологичными и понятными." },
                             { role: "user", content: text }
                         ]
                     })
@@ -191,93 +374,38 @@
                 const data = await response.json();
                 loadDiv.remove();
 
-                if (data.error) throw new Error(data.error.message);
-
                 const aiText = data.choices[0].message.content;
-                currentMessages.push({ text: aiText, sender: 'ai' });
-                
-                const title = currentMessages[0].text.substring(0, 25) + '...';
-                const idx = chatHistory.findIndex(c => c.id === currentChatId);
-                if(idx === -1) chatHistory.unshift({id: currentChatId, title, messages: currentMessages});
-                else chatHistory[idx].messages = currentMessages;
-                localStorage.setItem('eco_history', JSON.stringify(chatHistory));
+                addMessage(aiText, 'ai');
 
-                const { contentDiv, messageDiv } = addMessage('', 'ai');
-                typeWriter(aiText, contentDiv, () => addActionsToMessage(messageDiv, aiText));
-                renderChatList();
-
-            } catch (error) {
-                if (loadDiv) loadDiv.remove();
-                addMessage('Произошла ошибка при связи с эко-сервером: ' + error.message, 'ai');
+            } catch (e) {
+                loadDiv.remove();
+                addMessage('Ошибка: проверьте подключение или API ключ.', 'ai');
             }
-        }
-
-        function addStatusMessage(text) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message ai-message';
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content typing-indicator';
-            contentDiv.textContent = text;
-            messageDiv.appendChild(contentDiv);
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            return { loadDiv: messageDiv };
-        }
-
-        function typeWriter(text, element, callback) {
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML = marked.parse(text.substring(0, i + 1));
-                    i++;
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    setTimeout(type, 5);
-                } else if (callback) callback();
-            }
-            type();
         }
 
         function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', `${sender}-message`);
-            const contentDiv = document.createElement('div');
-            contentDiv.classList.add('message-content');
-            contentDiv.textContent = text;
-            messageDiv.appendChild(contentDiv);
-            chatMessages.appendChild(messageDiv);
+            const div = document.createElement('div');
+            div.className = `message ${sender}-message`;
+            div.innerHTML = marked.parse(text);
+            chatMessages.appendChild(div);
             chatMessages.scrollTop = chatMessages.scrollHeight;
-            return { contentDiv, messageDiv };
         }
 
-        function addActionsToMessage(messageDiv, text) {
-            const actions = document.createElement('div');
-            actions.className = 'message-actions';
-            actions.innerHTML = `
-                <button class="action-btn" title="Скопировать"><i data-lucide="copy"></i></button>
-                <button class="action-btn" title="Озвучить"><i data-lucide="volume-2"></i></button>
-            `;
-            messageDiv.appendChild(actions);
-            lucide.createIcons();
-            
-            actions.children[0].onclick = () => navigator.clipboard.writeText(text);
-            actions.children[1].onclick = () => {
-                const utterance = new SpeechSynthesisUtterance(text.replace(/[#*`]/g, ''));
-                utterance.lang = 'ru-RU';
-                window.speechSynthesis.speak(utterance);
-            };
+        function addStatusMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'message ai-message typing-indicator';
+            div.textContent = text;
+            chatMessages.appendChild(div);
+            return div;
         }
 
-        function switchView(viewId) {
-            document.querySelectorAll('.view-section').forEach(v => v.style.display = 'none');
-            const target = document.getElementById(viewId);
-            target.style.display = 'block';
-            document.getElementById('sidebarToggle').style.display = (viewId === 'view-chat') ? 'block' : 'none';
+        searchBtn.onclick = sendMessage;
+        searchInput.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
+
+        function createNewChat() {
+            chatMessages.innerHTML = '';
+            sidebar.classList.remove('open');
         }
-
-        searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-        searchBtn.addEventListener('click', sendMessage);
-
-        initSidebar();
     </script>
 </body>
 </html>
