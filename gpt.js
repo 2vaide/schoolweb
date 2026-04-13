@@ -1,3 +1,4 @@
+// ВАЖНО: Никогда не храните реальные ключи в открытом коде на продакшене!
 const API_KEY = 'sk-or-v1-d2ce0ef32273d523d7e39fe37ddd446ec6b67e25d275d884c39648e739274c'; 
 
 const searchContainer = document.querySelector('.search-container');
@@ -17,8 +18,8 @@ async function sendMessage() {
     addMessage(text, 'user');
     searchInput.value = '';
 
-    // Создаем индикатор загрузки
-    const loadingId = addMessage('Печатает...', 'ai');
+    // Индикатор ожидания (эко-стиль)
+    const loadingId = addMessage('Ищу экологичное решение...', 'ai');
 
     try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -28,9 +29,13 @@ async function sendMessage() {
                 'Authorization': `Bearer ${API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4o", // Убедитесь, что у вас есть доступ к этой модели
+                model: "gpt-4o", 
                 messages: [
-                    { role: "system", content: "Отвечай кратко и на русском языке." },
+                    { 
+                        role: "system", 
+                        // МЕНЯЕМ РОЛЬ: Теперь ИИ — эксперт по экологии
+                        content: "Ты — помощник по экологии и осознанному потреблению. Твоя цель — давать советы по переработке, сокращению отходов и защите окружающей среды. Отвечай кратко, вдохновляюще и на русском языке." 
+                    },
                     { role: "user", content: text }
                 ]
             })
@@ -38,7 +43,6 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        // Удаляем индикатор загрузки
         const loadingElement = document.getElementById(loadingId);
         if (loadingElement) loadingElement.remove();
 
@@ -53,7 +57,7 @@ async function sendMessage() {
         if (loadingElement) loadingElement.remove();
         
         console.error('Error:', error);
-        addMessage('Произошла ошибка. Попробуйте позже.', 'ai');
+        addMessage('Произошла ошибка связи с природой. Попробуйте позже.', 'ai');
     }
 }
 
@@ -67,7 +71,6 @@ function addMessage(text, sender) {
 
     chatMessages.appendChild(messageDiv);
     
-    // Плавная прокрутка вниз
     chatMessages.scrollTo({
         top: chatMessages.scrollHeight,
         behavior: 'smooth'
