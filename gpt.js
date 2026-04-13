@@ -5,87 +5,89 @@ const chatMessages = document.getElementById('chat-messages');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
-
+// Expand chat on input focus
 searchInput.addEventListener('focus', () => {
-  searchContainer.classList.add('active');
+searchContainer.classList.add('active');
 });
 
+// Send message function
+async function sendMessage() {
+const text = searchInput.value.trim();
+if (!text) return;
 
-async function sendMessage() {}
-  const text = searchInput.value.trim();
-  if (!text) return;
+// Add user message
+addMessage(text, 'user');
+searchInput.value = '';
 
+// Show loading indicator
+const loadingId = addMessage('Thinking...', 'ai');
 
-  addMessage(text, 'user');
-  searchInput.value = '';
+try {
+const response = await fetch('https://api.openai.com/v1/chat/completions', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `Bearer ${API_KEY}`
+},
+body: JSON.stringify({
+model: "gpt-4o",
+messages: [{ role: "user", content: text },
+{role: "system", content: "Отвечай кратко и на русском языке." }]
+})
+});
 
+const data = await response.json();
 
-  const loadingId = addMessage('Thinking...', 'ai');
+// Remove loading message
+const loadingElement = document.getElementById(loadingId);
+if (loadingElement) loadingElement.remove();
 
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [{ role: "user", content: text }]
-      })
-    });
+if (data.error) {
+addMessage(`Error: ${data.error.message}`, 'ai');
+} else {
+const aiText = data.choices[0].message.content;
+addMessage(aiText, 'ai');
+}
+} catch (error) {
+// Remove loading message
+const loadingElement = document.getElementById(loadingId);
+if (loadingElement) loadingElement.remove();
 
-    const data = await response.json();
-
-    
-    const loadingElement = document.getElementById(loadingId);
-    if (loadingElement) loadingElement.remove();
-
-    if (data.error) {
-      addMessage(`Error: ${data.error.message}`, 'ai');
-    } else {
-      const aiText = data.choices[0].message.content;
-      addMessage(aiText, 'ai');
-    }
-  } catch (error) {
-    
-    const loadingElement = document.getElementById(loadingId);
-    if (loadingElement) loadingElement.remove();
-
-    console.error('Error:', error);
-    addMessage('Sorry, something went wrong. Please try again.', 'ai');
-  }
+console.error('Error:', error);
+addMessage('Sorry, something went wrong. Please try again.', 'ai');
+}
 }
 
+// Helper to add messages to UI
 function addMessage(text, sender) {
-  const messageDiv = document.createElement('div');
-  messageDiv.classList.add('message', `${sender}-message`);
-  messageDiv.textContent = text;
+const messageDiv = document.createElement('div');
+messageDiv.classList.add('message', `${sender}-message`);
+messageDiv.textContent = text;
 
+// Add unique ID for loading message
+const id = 'msg-' + Date.now();
+messageDiv.id = id;
 
-  const id = 'msg-' + Date.now();
-  messageDiv.id = id;
-
-  chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return id;
+chatMessages.appendChild(messageDiv);
+chatMessages.scrollTop = chatMessages.scrollHeight;
+return id;
 }
 
-
+// Event listeners
 searchBtn.addEventListener('click', sendMessage);
 
 searchInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    sendMessage();
-  }
+if (e.key === 'Enter') {
+sendMessage();
+}
 });
 
-
+// Close chat if clicked outside (optional)
 document.addEventListener('click', (e) => {
-  if (!searchContainer.contains(e.target)) {
-   
-    if (searchInput.value === '' && chatMessages.children.length === 0) {
-      searchContainer.classList.remove('active');
-    }
-  }
+if (!searchContainer.contains(e.target)) {
+// Only remove active if input is empty and no messages to prevent accidental closing
+if (searchInput.value === '' && chatMessages.children.length === 0) {
+searchContainer.classList.remove('active');
+}
+}
 });
