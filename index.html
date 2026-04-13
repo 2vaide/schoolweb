@@ -25,7 +25,7 @@
 </nav>
 </header>
 
-<!-- Sidebar -->
+
 <div id="chatSidebar" class="chat-sidebar">
 <button id="newChatBtn" class="new-chat-btn">
 <i data-lucide="plus"></i> Новый чат
@@ -36,15 +36,15 @@
 </div>
 </div>
 
-<!-- Toggle Button (Mobile/Desktop) -->
+
 <button id="sidebarToggle" class="sidebar-toggle">
 <i data-lucide="panel-left"></i>
 </button>
 
-<!-- VIEWS CONTAINER -->
+
 <div id="views-container">
 
-<!-- HOME VIEW -->
+
 <div id="view-home" class="view-section active">
 <div class="hero container">
 <div class="hero--info">
@@ -56,7 +56,7 @@
 </div>
 </div>
 
-<!-- CHAT VIEW -->
+
 <div id="view-chat" class="view-section">
 <div class="search-container">
 <div id="chat-messages" class="chat-messages"></div>
@@ -72,7 +72,6 @@
 </div>
 </div>
 
-<!-- ABOUT VIEW -->
 <div id="view-about" class="view-section glass-panel container">
 <h1>🚀 О проекте WEBYROKI</h1>
 <p>Добро пожаловать в будущее образования! Мы — команда разработчиков и педагогов, которые верят, что обучение
@@ -91,7 +90,7 @@
 </ul>
 </div>
 
-<!-- PORTFOLIO VIEW -->
+
 <div id="view-portfolio" class="view-section glass-panel container">
 <h1>🏆 Наше Портфолио</h1>
 <p>Мы гордимся проектами, которые уже помогли тысячам школьников:</p>
@@ -115,7 +114,6 @@
 </div>
 </div>
 
-<!-- NEWS VIEW -->
 <div id="view-news" class="view-section glass-panel container">
 <h1>📰 Последние Новости</h1>
 
@@ -145,18 +143,17 @@
 </article>
 </div>
 
-<!-- CONTACTS VIEW -->
 <div id="view-contacts" class="view-section glass-panel container">
 <h1>📞 Контакты</h1>
 <p>Есть вопросы или предложения? Мы всегда на связи!</p>
 
 <div style="margin-top: 30px;">
-<p><strong>📍 Адрес офиса:</strong><br>г. Москва, Инновационный центр Сколково, ул. Нобеля, д. 1</p>
+<p><strong>📍 Адрес офиса:</strong><br>г. Санкт - Петербурн, ул. Есенина, д. 24</p>
 <br>
 <p><strong>📧 Email:</strong><br><a href="mailto:support@webyroki.ru"
 style="color:#fa9021">support@webyroki.ru</a></p>
 <br>
-<p><strong>📱 Телефон:</strong><br>+7 (999) 000-00-00</p>
+<p><strong>📱 Телефон:</strong><br>+7 (911)-(843)-55-20</p>
 </div>
 
 <button class="btn" style="margin-top:30px; width: 100%;">Написать в поддержку</button>
@@ -170,12 +167,10 @@ style="color:#fa9021">support@webyroki.ru</a></p>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-// === НАСТРОЙКИ ЧАТА ===
-// true = робот отвечает "понарошку" (бесплатно, работает всегда).
-// false = нужен рабочий ключ.
+
 const USE_DEMO = false;
 
-// Perplexity API Key
+
 const API_KEY = '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';
 
 const searchContainer = document.querySelector('.search-container');
@@ -184,13 +179,12 @@ const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const micBtn = document.getElementById('micBtn');
 
-// Initialize initial icons
+
 lucide.createIcons();
 
-// === SPEECH STATE ===
+
 let currentSpeechBtn = null;
 
-// === SPEECH RECOGNITION (STT) ===
 let recognition;
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -213,7 +207,7 @@ searchInput.focus();
 recognition.onresult = (event) => {
 const transcript = event.results[0][0].transcript;
 searchInput.value = transcript;
-// Auto-send? optional
+
 };
 
 recognition.onerror = (event) => {
@@ -231,33 +225,33 @@ try {
 recognition.start();
 } catch (e) {
 console.error(e);
-// unlikely to fail sync, but good practice
+
 }
 });
 } else {
-micBtn.style.display = 'none'; // Hide if not supported
+micBtn.style.display = 'none'; 
 }
 
-// === TEXT TO SPEECH (TTS) ===
+
 function speakText(text, btn) {
-// Stop current speech
+
 if (window.speechSynthesis.speaking) {
 window.speechSynthesis.cancel();
 
-// If clicking the SAME button that is playing -> just stop.
+
 if (currentSpeechBtn === btn) {
 resetSpeechIcon(btn);
 currentSpeechBtn = null;
 return;
 }
 
-// If clicking different button -> stop old, start new.
+
 if (currentSpeechBtn) {
 resetSpeechIcon(currentSpeechBtn);
 }
 }
 
-// Clean Markdown
+
 let clean = text.replace(/\*\*/g, '');
 clean = clean.replace(/\*/g, '');
 clean = clean.replace(/__ |__/g, '');
@@ -269,10 +263,10 @@ clean = clean.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
 const utterance = new SpeechSynthesisUtterance(clean);
 utterance.lang = 'ru-RU';
 
-// Start Speaking
+
 utterance.onstart = () => {
 currentSpeechBtn = btn;
-// Change icon to volume-off (mute/stop indication)
+
 btn.innerHTML = '<i data-lucide="volume-x"></i>';
 lucide.createIcons({ nameAttr: 'data-lucide', attrs: { class: "lucide-icon" } });
 };
@@ -297,19 +291,19 @@ lucide.createIcons({ nameAttr: 'data-lucide', attrs: { class: "lucide-icon" } })
 }
 }
 
-// === COPY TO CLIPBOARD ===
+
 function copyText(text) {
 navigator.clipboard.writeText(text).then(() => {
-// Optional feedback
+
 });
 }
 
-// Expand chat on input focus
+
 searchInput.addEventListener('focus', () => {
 searchContainer.classList.add('active');
 });
 
-// === CHAT HISTORY LOGIC ===
+
 let chatHistory = JSON.parse(localStorage.getItem('schoolsite_history')) || [];
 let currentChatId = null;
 let currentMessages = [];
@@ -317,7 +311,7 @@ let currentMessages = [];
 function initSidebar() {
 renderChatList();
 
-// Toggle Sidebar
+
 const sidebar = document.getElementById('chatSidebar');
 const toggleBtn = document.getElementById('sidebarToggle');
 toggleBtn.addEventListener('click', () => {
@@ -330,11 +324,9 @@ createNewChat();
 if (window.innerWidth < 768) sidebar.classList.remove('open'); // Close on mobile
 });
 
-// Initialize a new chat if none exists or load last
+
 if (chatHistory.length > 0) {
-// Optional: Load last chat automatically?
-// For now, let's start fresh or user selects.
-// Let's create new by default to not confuse.
+
 createNewChat();
 } else {
 createNewChat();
@@ -346,8 +338,7 @@ currentChatId = Date.now().toString();
 currentMessages = [];
 chatMessages.innerHTML = ''; // Clear UI
 renderChatList();
-// Don't save to history yet until first message?
-// Or save empty? Let's save on first message to avoid empty chats.
+
 }
 
 function saveCurrentState() {
@@ -374,12 +365,9 @@ currentChatId = chat.id;
 currentMessages = chat.messages || [];
 chatMessages.innerHTML = '';
 
-// Render messages
+
 currentMessages.forEach(msg => {
-// Use isRaw=true for history to skip re-typing effect, direct render
-// But we need to render markdown.
-// addMessage logic needs strict handling.
-// Let's reuse addMessage but disable typing for history load.
+
 restoreMessage(msg.text, msg.sender);
 });
 
@@ -388,21 +376,20 @@ if (window.innerWidth < 768) sidebar.classList.remove('open');
 renderChatList();
 }
 
-// === VIEW CONTROLLER ===
+
 function switchView(viewId) {
-// Hide all views
+
 document.querySelectorAll('.view-section').forEach(el => {
 el.classList.remove('active');
-// Hide style explicit if set
 el.style.display = 'none';
 });
 
-// Show target
+
 const target = document.getElementById(viewId);
 target.classList.add('active');
-target.style.display = 'block'; // Ensure block display
+target.style.display = 'block'; 
 
-// Update Nav State
+
 document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
 const links = document.querySelectorAll('nav ul li a');
 links.forEach(link => {
@@ -414,7 +401,7 @@ link.parentElement.classList.add('active');
 }
 });
 
-// Toggle Visibility logic
+
 const sidebarToggle = document.getElementById('sidebarToggle');
 const sidebar = document.getElementById('chatSidebar');
 
@@ -426,9 +413,9 @@ sidebar.classList.remove('open');
 }
 }
 
-// === CHAT RENAMING ===
+
 function renameChat(e, id) {
-e.stopPropagation(); // Prevent loading chat
+e.stopPropagation(); 
 const chat = chatHistory.find(c => c.id === id);
 if (!chat) return;
 
@@ -440,7 +427,7 @@ renderChatList();
 }
 }
 
-// Update renderChatList to include Edit Button
+
 function renderChatList() {
 const list = document.getElementById('chatList');
 list.innerHTML = '';
@@ -449,7 +436,7 @@ chatHistory.forEach(chat => {
 const div = document.createElement('div');
 div.className = `chat-item ${chat.id === currentChatId ? 'active' : ''}`;
 
-// Layout: Title + Edit Icon (right)
+
 div.style.display = 'flex';
 div.style.justifyContent = 'space-between';
 div.style.alignItems = 'center';
@@ -480,26 +467,21 @@ list.appendChild(div);
 lucide.createIcons();
 }
 
-// Initial Setup
+
 switchView('view-home');
 
-// Special helper for restoring without saving again logic loop
 function restoreMessage(text, sender) {
 const { id, contentDiv, messageDiv } = addMessage(text, sender, true); // true = no markdown auto-parse in addMessage logic modification below?
-// Wait, my addMessage logic from previous step:
-// if sender=ai and !isRaw -> parse markdown.
-// We want to parse markdown here immediately.
 
 if (sender === 'ai') {
-// For restored messages, we just render markdown immediately
 let cleanText = text.replace(/\[\d+\]/g, '');
 contentDiv.innerHTML = marked.parse(cleanText);
 addActionsToMessage(messageDiv, text);
 }
-// User message is textContent by default in addMessage
+
 }
 
-// === TYPING EFFECT === (Existing)
+
 function typeWriter(text, element, callback) {
 let i = 0;
 const speed = 10;
@@ -521,19 +503,19 @@ if (callback) callback();
 type();
 }
 
-// Send message function (Updated to Save)
+
 async function sendMessage() {
 const text = searchInput.value.trim();
 if (!text) return;
 
-// Save User Message
+
 currentMessages.push({ text: text, sender: 'user' });
 saveCurrentState();
 
 addMessage(text, 'user');
 searchInput.value = '';
 
-// 1. STATUS: SEARCHING
+
 const { id: loadingId, messageDiv: loadingMsgDiv, contentDiv: loadingContent } = addMessage('<span style="display:flex;align-items:center;gap:8px;"><i data-lucide="globe" style="width:16px;"></i> Ищу информацию в интернете...</span>', 'ai', true);
 lucide.createIcons();
 
@@ -541,7 +523,7 @@ try {
 if (USE_DEMO) {
 await new Promise(resolve => setTimeout(resolve, 1500));
 
-// 2. STATUS: WRITING
+
 loadingContent.innerHTML = '<span style="display:flex;align-items:center;gap:8px;"><i data-lucide="pen-tool" style="width:16px;"></i> Пишу ответ...</span>';
 lucide.createIcons();
 await new Promise(resolve => setTimeout(resolve, 1000));
@@ -549,7 +531,7 @@ await new Promise(resolve => setTimeout(resolve, 1000));
 loadingMsgDiv.remove();
 
 const responseText = "Demo response.";
-currentMessages.push({ text: responseText, sender: 'ai' }); // Save AI
+currentMessages.push({ text: responseText, sender: 'ai' }); 
 saveCurrentState();
 
 const { contentDiv, messageDiv } = addMessage("", 'ai');
@@ -564,11 +546,10 @@ body: JSON.stringify({ model: "sonar", messages: [{ role: "user", content: text 
 
 const data = await response.json();
 
-// 2. STATUS: WRITING (Before showing result)
+
 loadingContent.innerHTML = '<span style="display:flex;align-items:center;gap:8px;"><i data-lucide="pen-tool" style="width:16px;"></i> Формулирую ответ...</span>';
 lucide.createIcons();
-await new Promise(resolve => setTimeout(resolve, 800)); // Small delay for effect
-
+await new Promise(resolve => setTimeout(resolve, 800)); 
 if (loadingMsgDiv) loadingMsgDiv.remove();
 
 if (data.error) {
@@ -577,7 +558,7 @@ addMessage(`API Error: ${data.error.message}`, 'ai');
 } else {
 const aiText = data.choices?.[0]?.message?.content || "No response.";
 
-// Save AI Message
+
 currentMessages.push({ text: aiText, sender: 'ai' });
 saveCurrentState();
 
@@ -594,24 +575,24 @@ addMessage(`Connection Error: ${error.message}`, 'ai');
 }
 }
 
-// Initialize
+
 initSidebar();
 
 function addActionsToMessage(messageDiv, text) {
-// Clean text for copy/speak
+
 const cleanText = text.replace(/\[\d+\]/g, '');
 
 const actionsDiv = document.createElement('div');
 actionsDiv.className = 'message-actions';
 
-// TTS
+
 const ttsBtn = document.createElement('button');
 ttsBtn.className = 'action-btn';
 ttsBtn.innerHTML = '<i data-lucide="volume-2"></i>';
 ttsBtn.title = 'Озвучить';
 ttsBtn.onclick = function () { speakText(cleanText, this); };
 
-// Copy
+
 const copyBtn = document.createElement('button');
 copyBtn.className = 'action-btn';
 copyBtn.innerHTML = '<i data-lucide="copy"></i>';
@@ -621,10 +602,6 @@ copyBtn.onclick = () => copyText(cleanText);
 actionsDiv.appendChild(ttsBtn);
 actionsDiv.appendChild(copyBtn);
 
-// Wrap content + actions
-// Current structure: messageDiv -> ContentDiv
-// We want: messageDiv -> ContentDiv, ActionsDiv
-// But messageDiv is column flex, so appending works.
 
 messageDiv.appendChild(actionsDiv);
 
@@ -636,25 +613,24 @@ attrs: { class: "lucide-icon" }
 chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Helper to add messages to UI
-// Returns object { id, contentDiv, messageDiv } if mostly empty, or just id for backward compat if needed.
+d.
 function addMessage(text, sender, isRaw = false) {
 const messageDiv = document.createElement('div');
 messageDiv.classList.add('message', `${sender}-message`);
 
-// Content Bubble
+
 const contentDiv = document.createElement('div');
 contentDiv.classList.add('message-content');
 
 if (text === "") {
-// Placeholder for typing
+
 } else if (sender === 'ai' && !isRaw) {
 let cleanText = text.replace(/\[\d+\]/g, '');
 contentDiv.innerHTML = marked.parse(cleanText);
 } else {
 if (isRaw && sender === 'ai') {
 contentDiv.innerHTML = text;
-// Apply "Action" appearance: muted, italic, no bubble background
+
 contentDiv.style.background = 'transparent';
 contentDiv.style.boxShadow = 'none';
 contentDiv.style.border = 'none';
@@ -667,7 +643,6 @@ contentDiv.textContent = text;
 }
 }
 
-// Assemble
 messageDiv.appendChild(contentDiv);
 chatMessages.appendChild(messageDiv);
 
@@ -679,12 +654,11 @@ messageDiv.id = id;
 return { id, contentDiv, messageDiv };
 }
 
-// Stop speaking on unload
+
 window.addEventListener('beforeunload', () => {
 window.speechSynthesis.cancel();
 });
 
-// Event listeners
 searchBtn.addEventListener('click', sendMessage);
 
 searchInput.addEventListener('keypress', (e) => {
