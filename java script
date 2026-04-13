@@ -1,46 +1,34 @@
-
 function validateAndSubmit(event) {
-    (метод event.preventDefault())
-    event.preventDefault(); 
+  event.preventDefault();
 
-    const form = document.getElementById('searchForm');
-    const input = form.elements.query; 
-    
-(Свойство value)
-    const query = input.value.trim(); 
-    
-    const messageDisplay = document.getElementById('validationMessage');
-    messageDisplay.textContent = ''; // Очищаем предыдущие сообщения
+  const form = document.getElementById('searchForm');
+  const input = form.elements.query;
+  const query = input.value.trim();
+  const messageDisplay = document.getElementById('validationMessage');
 
-    // 4. Проверка правильности ввода (Валидация)
-    if (query === '') {
-        messageDisplay.textContent = 'Поле поиска не может быть пустым.';
-        input.focus();
-        return false;
-    }
+  messageDisplay.textContent = ''; // Очищаем предыдущие сообщения
 
-    if (query.length < 3) {
-        messageDisplay.textContent = 'Запрос должен содержать минимум 3 символа.';
-        input.focus();
-        return false;
-    }
+  if (query === '') {
+    messageDisplay.textContent = 'Поле поиска не может быть пустым.';
+    input.focus();
+    return false;
+  }
 
-    // 5. Использование checkValidity() для встроенной HTML5-валидации
-    if (!input.checkValidity()) {
-        messageDisplay.textContent = input.validationMessage;
-        input.focus();
-        return false;
+  if (query.length < 3) {
+    messageDisplay.textContent = 'Запрос должен содержать минимум 3 символа.';
+    input.focus();
+    return false;
+  }
 
-    }
-    
-    // Если валидация успешна:
-    
-    console.log(`✅ Запрос успешно отправлен. Ищем: "${query}"`);
-    alert(`Имитация поиска по запросу: "${query}"`);
-    
-    // Очистка поля ввода (Метод form.reset())
-    form.reset(); 
-    
-    return true; 
+  if (!input.checkValidity()) {
+    messageDisplay.textContent = input.validationMessage;
+    input.focus();
+    return false;
+  }
+
+  console.log(`✅ Запрос успешно отправлен. Ищем: "${query}"`);
+  alert(`Имитация поиска по запросу: "${query}"`);
+
+  form.reset();
+  return true;
 }
-
