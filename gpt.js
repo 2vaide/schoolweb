@@ -11,7 +11,7 @@ searchInput.addEventListener('focus', () => {
 });
 
 
-async function sendMessage() {
+async function sendMessage() {}
   const text = searchInput.value.trim();
   if (!text) return;
 
