@@ -128,10 +128,10 @@ opacity: 1;
 height: 100%;
 }
 
-/* Chat Area Restyling */
+
 .message {
 display: flex;
-/* Kept flex for structure, but layout can be simpler */
+
 flex-direction: column;
 gap: 5px;
 padding: 0;
@@ -169,7 +169,7 @@ color: #e0e0e0;
 border-radius: 18px 18px 18px 2px;
 }
 
-/* Markdown Styles */
+
 .ai-message p {
 margin-bottom: 10px;
 }
@@ -239,7 +239,7 @@ background-color: transparent;
 color: #b4b4b4;
 cursor: pointer;
 border-radius: 6px;
-/* Rounded square feel */
+
 display: flex;
 align-items: center;
 justify-content: center;
@@ -304,7 +304,7 @@ gap: 4px;
 margin-top: 8px;
 margin-left: 0;
 opacity: 1;
-/* Always visible or high opacity */
+
 }
 
 .action-btn {
@@ -327,7 +327,7 @@ transition: background-color 0.2s, color 0.2s;
 .action-btn:hover {
 color: #fff;
 background-color: rgba(255, 255, 255, 0.1);
-/* Weak highlight */
+
 }
 
 .action-btn .lucide-icon {
@@ -349,7 +349,7 @@ border: none;
 color: white;
 outline: none;
 min-width: 0;
-/* Prevents flex items from overflowing */
+
 }
 
 input[type="search"]::placeholder {
@@ -370,7 +370,7 @@ transform: translateY(0);
 }
 }
 
-/* Scrollbar styling */
+
 .chat-messages::-webkit-scrollbar {
 width: 6px;
 }
@@ -418,7 +418,7 @@ header nav ul li {
 display: inline-block;
 position: relative;
 margin: 0 15px;
-/* Add spacing between items */
+
 }
 
 header nav ul li a {
@@ -434,10 +434,10 @@ content: '';
 position: absolute;
 width: 0;
 height: 3px;
-/* Thinner, elegant line */
+
 background: #fa9021;
 bottom: -2px;
-/* Hugs text closer */
+
 left: 0;
 transition: width 0.3s ease;
 border-radius: 2px;
@@ -451,17 +451,17 @@ width: 100%;
 header nav ul li:not(.btn).active a,
 header nav ul li:not(.btn) a:hover {
 color: #fa9021;
-/* Highlight text color too */
+
 }
 
-/* Button style override for Contacts */
+
 header nav ul li.btn a {
 background: #FA9021;
 padding: 9px 25px;
 border-radius: 50px;
-/* Pill shape */
+
 color: #fff !important;
-/* Force white text */
+
 transition: all 0.3s ease;
 }
 
@@ -471,7 +471,7 @@ transform: translateY(-2px);
 box-shadow: 0 5px 15px rgba(250, 144, 33, 0.4);
 }
 
-/* No underline for button */
+
 header nav ul li.btn a::after {
 display: none;
 }
@@ -517,7 +517,7 @@ transition: all 500ms ease;
 font-size: 17px;
 }
 
-/* Sidebar */
+
 .chat-sidebar {
 position: fixed;
 top: 0;
@@ -528,7 +528,7 @@ background: #000;
 border-right: 1px solid #333;
 padding: 15px;
 transform: translateX(-100%);
-/* Hidden by default or specific state */
+
 transition: transform 0.3s ease;
 z-index: 2000;
 display: flex;
@@ -568,7 +568,7 @@ border-radius: 5px;
 color: #fff;
 cursor: pointer;
 margin-top: 40px;
-/* Space for toggle */
+
 margin-bottom: 20px;
 transition: background 0.2s;
 font-size: 14px;
@@ -603,7 +603,7 @@ background: #1e1e1e;
 color: #fff;
 }
 
-/* View Switching */
+
 .view-section {
 display: none !important;
 opacity: 0;
@@ -616,19 +616,19 @@ opacity: 1;
 animation: fadeIn 0.5s ease forwards;
 }
 
-/* Glass Panel for Content Pages */
+
 .glass-panel {
 background: rgba(0, 0, 0, 0.8);
-/* Darker for visibility */
+
 backdrop-filter: blur(15px);
 border-radius: 20px;
 padding: 50px;
-/* More padding */
+
 border: 1px solid rgba(255, 255, 255, 0.1);
 box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 color: #e0e0e0;
 margin-top: 100px;
-/* Ensure it clears header */
+
 position: relative;
 z-index: 100;
 }
@@ -655,7 +655,7 @@ margin-bottom: 10px;
 margin-left: 20px;
 }
 
-/* Portfolio Grid */
+
 .grid-gallery {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -679,8 +679,8 @@ background: rgba(255, 255, 255, 0.1);
 border-color: #fa9021;
 }
 
-/* Sidebar Active State Fix */
+
 .chat-sidebar {
-/* Ensure sidebar is above new content if open */
+
 z-index: 3000;
 }
